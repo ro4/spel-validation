@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class SpELValidator implements ConstraintValidator<SpELCheck, Object>, BeanFactoryAware {
+public class SpELValidator implements ConstraintValidator<SpELAssert, Object>, BeanFactoryAware {
 
     private static final SpelExpressionParser PARSER = new SpelExpressionParser();
 
@@ -22,10 +22,14 @@ public class SpELValidator implements ConstraintValidator<SpELCheck, Object>, Be
 
     private BeanFactory beanFactory;
 
-    private String variableName;
+    private String alias;
+
+    private String message;
+
+    private String reportOn;
 
     @Override
-    public void initialize(SpELCheck anno) {
+    public void initialize(SpELAssert anno) {
         ConstraintValidator.super.initialize(anno);
         if (!ObjectUtils.isEmpty(anno.expression())) {
             expression = StringUtils.arrayToDelimitedString(anno.expression(), " ");
@@ -34,16 +38,23 @@ public class SpELValidator implements ConstraintValidator<SpELCheck, Object>, Be
         }
         this.spELCtx = new StandardEvaluationContext();
         spELCtx.setBeanResolver(new BeanFactoryResolver(beanFactory));
-        this.variableName = anno.variableName();
+        this.alias = anno.alias();
+        this.message = anno.message();
+        this.reportOn = anno.reportOn();
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return false;
+        boolean result = false;
+        if (value != null) {
+            spELCtx.setVariable(alias, value);
+            result = Boolean.TRUE.equals(PARSER.parseExpression(expression).getValue(spELCtx, Boolean.TYPE));
         }
-        spELCtx.setVariable(variableName, value);
-        return Boolean.TRUE.equals(PARSER.parseExpression(expression).getValue(spELCtx, Boolean.TYPE));
+        if (!result && !reportOn.isEmpty()) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(message).addPropertyNode(reportOn).addConstraintViolation();
+        }
+        return result;
     }
 
     @Override
