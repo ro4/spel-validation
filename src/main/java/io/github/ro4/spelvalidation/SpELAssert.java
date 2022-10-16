@@ -13,7 +13,7 @@ public @interface SpELAssert {
 
     String value() default "";
 
-    String[] expression() default "";
+    String[] expression() default {};
 
     String message() default "{io.github.ro4.spelvalidation.SpELAssert.message}";
 

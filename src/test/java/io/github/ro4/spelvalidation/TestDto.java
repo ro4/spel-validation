@@ -1,17 +1,17 @@
 package io.github.ro4.spelvalidation;
 
-import javax.validation.constraints.NotNull;
-
 @SpELAssert(expression = "#p.maxAge > #p.minAge", message = "max age must greater than min age")
 @SuppressWarnings("unused")
 public class TestDto {
     @SpELAssert(expression = "@simpleService.isNameUnique(#p)", message = "name already exists")
-    private String name;
+    protected String name;
 
-    @NotNull
-    private Integer maxAge;
+    @SpELAssert("#p == 100")
+    protected Integer maxAge;
 
-    private Integer minAge;
+    @SpELAssert(expression = {"#_ > 100", "and #_ < 110"}, alias = "_", message = "ff")
+    @SpELAssert("true")
+    protected Integer minAge;
 
     public String getName() {
         return name;

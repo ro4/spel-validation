@@ -2,11 +2,7 @@ package io.github.ro4.spelvalidation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
 
 @Configuration
 public class TestConfiguration {
@@ -16,29 +12,16 @@ public class TestConfiguration {
     }
 
     @Bean
-    public SimpleController simpleController() {
-        return new SimpleController();
+    public SpELValidator spELValidator() {
+        return new SpELValidator();
     }
 
-    @Bean
-    public ValidService validService() {
-        return new ValidServiceImpl();
-    }
 
     @Service
     @SuppressWarnings("unused")
     public static class SimpleService {
         public boolean isNameUnique(String name) {
-            return true;
-        }
-    }
-
-    @Component
-    @Validated
-    public static class SimpleController {
-        @Validated
-        public String save(@Valid TestDto dto) {
-            return dto.getName();
+            return "hello".equals(name);
         }
     }
 }
