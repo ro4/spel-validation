@@ -30,7 +30,6 @@ public class SpELValidator implements ConstraintValidator<SpELAssert, Object>, B
 
     @Override
     public void initialize(SpELAssert anno) {
-        ConstraintValidator.super.initialize(anno);
         if (!ObjectUtils.isEmpty(anno.expression())) {
             expression = StringUtils.arrayToDelimitedString(anno.expression(), " ");
         } else if (!ObjectUtils.isEmpty(anno.value())) {
@@ -45,11 +44,8 @@ public class SpELValidator implements ConstraintValidator<SpELAssert, Object>, B
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        boolean result = false;
-        if (value != null) {
-            spELCtx.setVariable(alias, value);
-            result = Boolean.TRUE.equals(PARSER.parseExpression(expression).getValue(spELCtx, Boolean.TYPE));
-        }
+        spELCtx.setVariable(alias, value);
+        boolean result = Boolean.TRUE.equals(PARSER.parseExpression(expression).getValue(spELCtx, Boolean.TYPE));
         if (!result && !reportOn.isEmpty()) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(message).addPropertyNode(reportOn).addConstraintViolation();
