@@ -1,4 +1,4 @@
-##SpEL Validation
+## SpEL Validation
 
 This is a custom validator based on `Jakarta validation-api`, inspired by `org.hibernate.validator.constraints.ScriptAssert`.  
 The source code is so tiny, you can read it as document :)
