@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.ro4</groupId>
-    <artifactId>sepl-validation</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <artifactId>spel-validation</artifactId>
+    <version>1.0.0</version>
     <name>SpEL Validation</name>
-    <description>Using SpEL to do some complex validations</description>
+    <description>This is a custom validator based on `Jakarta validation-api`, inspired by `org.hibernate.validator.constraints.ScriptAssert`.</description>
     <url>https://github.com/ro4/spel-validation</url>
     <licenses>
         <license>
@@ -71,11 +71,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
